@@ -1,0 +1,84 @@
+{
+  "Routes": [
+    // Customer Web API
+    {
+      "DownstreamPathTemplate": "/api/Customer",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customerwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Customer",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Customer/{customerId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "customerwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Customer/{customerId}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ]
+    },
+
+    //Product Web API
+    {
+      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Product",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Product/{productId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "productwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Product/{productId}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ]
+    },
+
+    // Order Web API
+    {
+      "DownstreamPathTemplate": "/api/Order",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Order",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Order/{orderId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "orderwebapi",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/Order/{orderId}",
+      "UpstreamHttpMethod": [ "Get", "Delete" ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:8001"
+  }
+}

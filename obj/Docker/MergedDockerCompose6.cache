@@ -1,0 +1,460 @@
+name: dockercompose2723760479248440155
+services:
+  apigateway:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: ApiGateway/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: ApiGateway
+      target: base
+    container_name: ApiGateway
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
+    image: apigateway:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages
+        --additionalProbingPath /.nuget/fallbackpackages  "/app/bin/Debug/net7.0/ApiGateway.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 80
+      published: "8001"
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution\ApiGateway
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\.nuget\packages\
+      target: /.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /home/app/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /home/app/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\linux-x64\net7.0
+      target: /HotReloadProxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+      target: /HotReloadAgent
+      read_only: true
+      bind:
+        create_host_path: true
+  customerdb:
+    container_name: customer-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Senha@123
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "18001"
+      protocol: tcp
+  customerwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: CustomerWebApi/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: CustomerWebApi
+      target: base
+    container_name: customer-api
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DB_HOST: customerdb
+      DB_NAME: dms_customer
+      DB_SA_PASSWORD: Senha@123
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
+    image: customerwebapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages
+        --additionalProbingPath /.nuget/fallbackpackages  "/app/bin/Debug/net7.0/CustomerWebApi.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution\CustomerWebApi
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\.nuget\packages\
+      target: /.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /home/app/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /home/app/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\linux-x64\net7.0
+      target: /HotReloadProxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+      target: /HotReloadAgent
+      read_only: true
+      bind:
+        create_host_path: true
+  orderdb:
+    container_name: order-db
+    image: mongo
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 27017
+      published: "18005"
+      protocol: tcp
+  orderwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: OrderWebApi/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: OrderWebApi
+      target: base
+    container_name: order-api
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DB_HOST: orderdb
+      DB_NAME: dms_order
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
+    image: orderwebapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages
+        --additionalProbingPath /.nuget/fallbackpackages  "/app/bin/Debug/net7.0/OrderWebApi.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      backend: null
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution\OrderWebApi
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\.nuget\packages\
+      target: /.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /home/app/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /home/app/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\linux-x64\net7.0
+      target: /HotReloadProxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+      target: /HotReloadAgent
+      read_only: true
+      bind:
+        create_host_path: true
+  productdb:
+    container_name: product-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Senha@123
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "18003"
+      protocol: tcp
+  productwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: ProductWebApi/Dockerfile
+      labels:
+        com.microsoft.created-by: visual-studio
+        com.microsoft.visual-studio.project-name: ProductWebApi
+      target: base
+    container_name: product-api
+    entrypoint:
+    - tail
+    - -f
+    - /dev/null
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_LOGGING__CONSOLE__DISABLECOLORS: "true"
+      DB_HOST: productdb
+      DB_NAME: dms_product
+      DB_SA_PASSWORD: Senha@123
+      DOTNET_USE_POLLING_FILE_WATCHER: "1"
+      NUGET_FALLBACK_PACKAGES: /.nuget/fallbackpackages
+    image: productwebapi:dev
+    labels:
+      com.microsoft.visualstudio.debuggee.arguments: ' --additionalProbingPath /.nuget/packages
+        --additionalProbingPath /.nuget/fallbackpackages  "/app/bin/Debug/net7.0/ProductWebApi.dll"'
+      com.microsoft.visualstudio.debuggee.killprogram: /bin/sh -c "if PID=$$(pidof
+        dotnet); then kill $$PID; fi"
+      com.microsoft.visualstudio.debuggee.program: dotnet
+      com.microsoft.visualstudio.debuggee.workingdirectory: /app
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    tty: true
+    volumes:
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution\ProductWebApi
+      target: /app
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Projetos\C#\DemoMicroserviceSolution
+      target: /src
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\vsdbg\vs2017u5
+      target: /remote_debugger
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\.nuget\packages\
+      target: /.nuget/packages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages
+      target: /.nuget/fallbackpackages
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /root/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/ASP.NET/Https
+      target: /home/app/.aspnet/https
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /root/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\Vinicius Alarcon\AppData\Roaming/Microsoft/UserSecrets
+      target: /home/app/.microsoft/usersecrets
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\TokenService.Proxy\linux-x64\net7.0
+      target: /TokenService.Proxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Sdks\Microsoft.Docker.Sdk\tools\HotReloadProxy\linux-x64\net7.0
+      target: /HotReloadProxy
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\HotReload
+      target: /HotReloadAgent
+      read_only: true
+      bind:
+        create_host_path: true
+networks:
+  backend:
+    name: dockercompose2723760479248440155_backend

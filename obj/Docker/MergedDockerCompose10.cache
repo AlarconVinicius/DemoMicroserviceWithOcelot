@@ -1,0 +1,125 @@
+name: dockercompose2723760479248440155
+services:
+  apigateway:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: ApiGateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: apigateway
+    networks:
+      backend: null
+      frontend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 80
+      published: "8001"
+      protocol: tcp
+  blazorserverwebui:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: BlazorServerWebUI/Dockerfile
+    container_name: blazor-web-ui
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: blazorserverwebui
+    networks:
+      frontend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+    - mode: ingress
+      target: 80
+      published: "8002"
+      protocol: tcp
+  customerdb:
+    container_name: customer-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Senha@123
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "18001"
+      protocol: tcp
+  customerwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: CustomerWebApi/Dockerfile
+    container_name: customer-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DB_HOST: customerdb
+      DB_NAME: dms_customer
+      DB_SA_PASSWORD: Senha@123
+    image: customerwebapi
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+  orderdb:
+    container_name: order-db
+    image: mongo
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 27017
+      published: "18005"
+      protocol: tcp
+  orderwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: OrderWebApi/Dockerfile
+    container_name: order-api
+    environment:
+      DB_HOST: orderdb
+      DB_NAME: dms_order
+    image: orderwebapi
+    networks:
+      backend: null
+  productdb:
+    container_name: product-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: Senha@123
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 1433
+      published: "18003"
+      protocol: tcp
+  productwebapi:
+    build:
+      context: C:\Projetos\C#\DemoMicroserviceSolution
+      dockerfile: ProductWebApi/Dockerfile
+    container_name: product-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      DB_HOST: productdb
+      DB_NAME: dms_product
+      DB_SA_PASSWORD: Senha@123
+    image: productwebapi
+    networks:
+      backend: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+networks:
+  backend:
+    name: dockercompose2723760479248440155_backend
+  frontend:
+    name: dockercompose2723760479248440155_frontend
